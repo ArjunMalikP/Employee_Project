@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Employee Data</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+<div class="container">
+  <h2 align="center">Scale-UP Employee Data </h2> <hr/>
+
+<form>
+	<p id="data"></p>
+	<label for="empId">Employee Id		:  </label> <input type="text"  name="empId"	class="form-control mb-8 col-8" placeholder="Employee Id" /> <br/>
+	<label for="firstName">First Name	:  </label> <input type="text"  name="firstName" class="form-control mb-8 col-8" placeholder="First Name" /> <br/>
+	<label for="lastName">Last Name		:  </label> <input type="text"  name="lastName"	class="form-control mb-8 col-8" placeholder="Last Name" /> <br/>
+	<label for="age">Age				:  </label> <input type="text"  name="age"		class="form-control mb-8 col-8" placeholder="Age" /> <br/>
+	<label for="email">eMail			:  </label> <input type="email" name="email"	class="form-control mb-8 col-8" placeholder="Email" /> <br/>
+	<label for="mobile">Mobile Number	:  </label> <input type="text"  name="mobile"	class="form-control mb-8 col-8" placeholder="Mobile" /> <br/>
+	<label for="city">City				:  </label> <input type="text"  name="city"		class="form-control mb-8 col-8" placeholder="City" /> <br/>
+	<label for="salary">Salary			:  </label> <input type="text"  name="salary"	class="form-control mb-8 col-8" placeholder="Salary" /> <br/><br/>
+				 
+				  <button type="button" class="btn" value="Add Person" onclick="addPerson()"/> Add Person </button>
+				  <input type="hidden" name="recordId" value="-1"/>
+
+	<p id="submit"></p>
+</form>
+
+
+<script>
+	var persons = new Array();
+	function addPerson()
+	{
+		if(validate())
+		{
+			var myForm		= document.forms[0];
+			var empId		= myForm.empId;
+			var firstName	= myForm.firstName;
+			var lastName	= myForm.lastName;
+			var age			= myForm.age;
+			var email		= myForm.email;
+			var mobile		= myForm.mobile;
+			var city		= myForm.city;
+			var salary		= myForm.salary;
+			var person = {
+							empId: empId.value,
+							firstName: firstName.value,
+							lastName: lastName.value,
+							age: age.value,
+							email: email.value,
+							mobile: mobile.value,
+							city: city.value,
+							salary: salary.value
+						 };
+			if(myForm.recordId.value == -1)
+			{	///alert("arjuns111"+myForm.recordId.value);
+				persons[persons.length] = person;
+			} else
+			{	//alert("arjuns222"+myForm.recordId.value);
+				persons.splice(myForm.recordId.value, 0, person);
+				myForm.recordId.value = -1;
+			}
+			myForm.reset();
+			populateData();
+		}
+	}
+
+	function populateData()
+	{
+		if(persons.length > 0)
+		{
+			var tableStr = "<table  class='table table-bordered'>";
+				tableStr += "<tr><th>SNo - (<u>Click</u> to EDIT/ UPDATE/ Delete) </th><th>Employee Id</th><th>First Name</th><th>Last Name</th><th>Age</th><th>eMail</th><th>Mobile Number</th><th>City</th><th>Salary</th></tr>";
+				var person;
+				for (var i = 0; i < persons.length; i++)
+				{
+					person = persons[i];
+					tableStr += "<tr>";
+					tableStr += "<td> <u><a href='#' onclick='retrieve(" + i + ")'>" + ( i + 1 ) + "</a></u> </td>";
+					tableStr += "<td>" +  person.empId + "</td>";
+					tableStr += "<td>" +  person.firstName + "</td>";
+					tableStr += "<td>" +  person.lastName + "</td>";
+					tableStr += "<td>" +  person.age + "</td>";
+					tableStr += "<td>" +  person.email + "</td>";
+					tableStr += "<td>" +  person.mobile + "</td>";
+					tableStr += "<td>" +  person.city + "</td>";
+					tableStr += "<td>" +  person.salary + "</td>";
+					tableStr += "</tr>";
+				}
+				tableStr += "</table>";
+				document.getElementById("data").innerHTML = tableStr;
+				document.getElementById("submit").innerHTML = "<input type='submit' value='submit'/>";
+		} else
+		{
+				document.getElementById("data").innerHTML = "No Persons to display";
+				document.getElementById("submit").innerHTML = "";
+		}
+	}
+
+	function retrieve(index)
+	{
+		var person = persons[index];
+			persons.splice(index, 1);
+		var myForm = document.forms[0];
+		myForm.empId.value = person.empId;
+		myForm.firstName.value = person.firstName;
+		myForm.lastName.value = person.lastName;
+		myForm.age.value = person.age;
+		myForm.email.value = person.email;
+		myForm.mobile.value = person.mobile;
+		myForm.city.value = person.city;
+		myForm.salary.value = person.salary;
+		myForm.recordId.value = index;
+		populateData();
+	}
+
+	function validate()
+	{	// validate form data
+		
+			var myForm = document.forms[0];
+		var empId		= myForm.empId;
+		var firstName	= myForm.firstName;
+		var lastName	= myForm.lastName;
+		var age			= myForm.age;
+		var email		= myForm.email;
+		var mobile		= myForm.mobile;
+		var city		= myForm.city;
+		var salary		= myForm.salary;
+
+		if(empId.value.length == 0)
+		{
+			alert("pls enter Employee Id");
+			empId.focus();
+			return false;
+		}
+		
+		if(firstName.value.length == 0)
+		{
+			alert("pls enter firstName");
+			firstName.focus();
+			return false;
+		}
+
+		if(lastName.value.length == 0)
+		{
+			alert("pls enter lastName");
+			lastName.focus();
+			return false;
+		}
+
+		if(age.value.length == 0 || !validateAge(age))
+		{
+			alert("pls enter Age");
+			age.focus();
+			return false;
+		}
+		
+		if(email.value.length == 0 || !validateEmail(email.value))
+		{
+			alert("pls enter eMail");
+			email.focus();
+			return false;
+		}
+		if(mobile.value.length == 0 || !phonenumber(mobile))
+		{
+			alert("pls enter Mobile");
+			mobile.focus();
+			return false;
+		}
+		if(city.value.length == 0)
+		{
+			alert("pls enter City");
+			city.focus();
+			return false;
+		}
+		if(salary.value.length == 0)
+		{
+			alert("pls enter Salary");
+			salary.focus();
+			return false;
+		}
+		return true;	
+	}
+
+	function phonenumber(inputtxt)
+	{ //alert("arjunmobileNum"+inputtxt);
+	  var phoneno = /^\d{10}$/;
+	  if(inputtxt.value.match(phoneno)){
+		  return true;
+	  }
+	  else{
+		 alert("Not a valid Phone Number");
+		 return false;
+	  }
+	}
+
+
+	function validateAge(inputtxt)
+	{ //alert("arjunmobileNum"+inputtxt);
+	  var phoneno = /^\d{2}$/;
+	  if(inputtxt.value.match(phoneno)){
+		  return true;
+	  }
+	  else{
+		 alert("Not a valid Age");
+		 return false;
+	  }
+	}
+
+function validateEmail(mail) 
+{ //alert("email value : "+mail);
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+  {
+    return (true)
+  }
+    alert("Not a valid email address!")
+    return (false)
+}
+
+</script>
+</div>
+</body>
+</html>
